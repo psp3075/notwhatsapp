@@ -25,7 +25,7 @@ function Chat() {
     if (roomId) {
       db.collection("rooms")
         .doc(roomId)
-        .onSnapshot((snapshot) => setRoomName(snapshot.data().name));
+        .onSnapshot((snapshot) => setRoomName(snapshot.data()?.name));
 
       db.collection("rooms")
         .doc(roomId)
@@ -63,7 +63,7 @@ function Chat() {
             last seen{" "}
             {new Date(
               messages[messages.length - 1]?.timestamp?.toDate()
-            ).toUTCString()}
+            )?.toUTCString()}
           </p>
         </div>
         <div class="chat__headerRight">

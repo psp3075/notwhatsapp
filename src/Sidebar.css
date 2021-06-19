@@ -28,12 +28,14 @@
   margin-left: 10px;
   width: 90%;
   height: 30px;
+  outline: none;
 }
 
 .sidebar__header {
   display: flex;
   justify-content: space-between;
   padding: 20px;
+  background-color: #ededed;
   border-right: 1px solid lightgray;
 }
 
@@ -52,4 +54,12 @@
   flex: 1;
   background-color: white;
   overflow: scroll;
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+
+@media (max-width: 550px) {
+  .sidebar {
+    flex: 0.25;
+  }
 }
