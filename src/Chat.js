@@ -1,10 +1,7 @@
 import { Avatar, IconButton } from "@material-ui/core";
-import {
-  AttachFile,
-  InsertEmoticon,
-  MoreVert,
-  SearchOutlined,
-} from "@material-ui/icons";
+import DeleteIcon from "@mui/icons-material/Delete";
+import Tooltip from "@mui/material/Tooltip";
+import { AttachFile, InsertEmoticon, SearchOutlined } from "@material-ui/icons";
 import firebase from "firebase";
 import MicIcon from "@material-ui/icons/Mic";
 import React, { useEffect, useState } from "react";
@@ -33,6 +30,7 @@ function Chat() {
         .orderBy("timestamp", "asc")
         .onSnapshot((snapshot) => {
           setMessages(snapshot.docs.map((doc) => doc.data()));
+          //console.log(messages);
         });
     }
   }, [roomId]);
@@ -53,29 +51,40 @@ function Chat() {
     setInput("");
   };
 
+  function chatDelete() {
+    let confirmation = window.confirm("your chat room will be deleted");
+    //console.log(confirmation);
+    confirmation && db.collection("rooms").doc(roomId).delete();
+  }
+
   return (
     <div className="chat">
       <div className="chat__header">
-        <Avatar src={`https://avatars.dicebear.com/api/human/${seed}.svg`} />
+        <Avatar
+          src={`https://avatars.dicebear.com/api/human/${seed}.svg`}
+          style={{
+            marginRight: "14px",
+            border: "0.5px solid",
+            background: "white",
+          }}
+        />
         <div className="chat__headerInfo">
           <h3>{roomName}</h3>
-          <p>
-            last seen{" "}
-            {new Date(
-              messages[messages.length - 1]?.timestamp?.toDate()
-            )?.toUTCString()}
-          </p>
+          {messages.length !== 0 && (
+            <p>
+              last seen{" "}
+              {new Date(
+                messages[messages.length - 1]?.timestamp?.toDate()
+              )?.toUTCString()}
+            </p>
+          )}
         </div>
         <div class="chat__headerRight">
-          <IconButton>
-            <SearchOutlined />
-          </IconButton>
-          <IconButton>
-            <AttachFile />
-          </IconButton>
-          <IconButton>
-            <MoreVert />
-          </IconButton>
+          <Tooltip title="Delete">
+            <IconButton>
+              <DeleteIcon onClick={chatDelete} />
+            </IconButton>
+          </Tooltip>
         </div>
       </div>
       <div className="chat__body">
@@ -83,17 +92,18 @@ function Chat() {
           <p
             className={`chat__message ${
               message.name === user.displayName && "chat__receiver"
-            }`}>
+            }`}
+          >
             <span className="chat__name">{message.name}</span>
             {message.messages}
-            <span className="chat__timestamp">
+            {/* <span className="chat__timestamp">
               {new Date(message.timestamp?.toDate()).toUTCString()}
-            </span>
+            </span> */}
           </p>
         ))}
       </div>
       <div class="chat__footer">
-        <InsertEmoticon />
+        {/* <InsertEmoticon /> */}
         <form>
           <input
             value={input}
@@ -102,10 +112,9 @@ function Chat() {
             type="text"
           />
           <button onClick={sendMessage} type="submit">
-            Send a message
+            Send
           </button>
         </form>
-        <MicIcon />
       </div>
     </div>
   );

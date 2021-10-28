@@ -1,5 +1,5 @@
-import { Avatar } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
+import { Avatar } from "@material-ui/core";
 import "./SidebarChat.css";
 import db from "./firebase";
 import { Link } from "react-router-dom";
@@ -20,6 +20,7 @@ function SidebarChat({ id, name, addNewChat }) {
         .orderBy("timestamp", "desc")
         .onSnapshot((snapshot) => {
           setMessages(snapshot.docs.map((doc) => doc.data()));
+          //console.log(snapshot.docs.map((doc) => doc.data()));
         });
     }
   }, [id]);
@@ -37,10 +38,17 @@ function SidebarChat({ id, name, addNewChat }) {
   return !addNewChat ? (
     <Link to={`/rooms/${id}`} key={id}>
       <div className="sidebarChat">
-        <Avatar src={`https://avatars.dicebear.com/api/human/${seed}.svg`} />
+        <Avatar
+          src={`https://avatars.dicebear.com/api/human/${seed}.svg`}
+          style={{
+            marginRight: "14px",
+            border: "0.5px solid",
+            background: "white",
+          }}
+        />
         <div className="sidebarChat__info">
           <h2>{name}</h2>
-          <p>{messages[0]?.message}</p>
+          <p>{messages[0]?.messages}</p>
         </div>
       </div>
     </Link>
